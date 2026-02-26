@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>名古屋哇嗚 | 極簡路線手札與總表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: '#2d3436', // 極簡深灰
+                        accent: '#0984e3', // 路線藍
+                        surface: '#f9f9f9',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #ffffff; color: #2d3436; }
+        .tab-content { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .tab-content.active { display: block; opacity: 1; }
+        
+        /* Map Container */
+        .map-container { position: relative; padding-bottom: 50%; height: 0; overflow: hidden; border-radius: 0.5rem; border: 1px solid #e2e8f0; }
+        .map-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        @media (max-width: 768px) { .map-container { padding-bottom: 75%; } }
+
+        /* Minimalist Timeline */
+        .timeline-item { position: relative; padding-left: 2rem; padding-bottom: 2rem; border-left: 2px solid #e2e8f0; }
+        .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+        .timeline-marker { position: absolute; left: -0.4rem; top: 0.25rem; width: 0.75rem; height: 0.75rem; border-radius: 50%; background-color: #fff; border: 2px solid #2d3436; }
+        .timeline-marker.primary { border-color: #0984e3; background-color: #0984e3; }
+        .timeline-marker.hotel { border-color: #d63031; background-color: #fff; }
+
+        /* Custom Scrollbar */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .table-container::-webkit-scrollbar { height: 6px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- Header -->
+    <header class="w-full pt-16 pb-12 px-6 text-center border-b border-gray-100 bg-surface">
+        <p class="text-xs font-bold tracking-[0.2em] text-gray-400 mb-3 uppercase">7 Days nagoya trip</p>
+        <h1 class="text-4xl md:text-5xl font-black text-brand mb-3 tracking-tight">名古屋哇嗚</h1>
+        <p class="text-sm text-gray-500 font-medium">2024.07.25 — 07.31</p>
+    </header>
+
+    <!-- Base Camp Info -->
+    <section class="max-w-3xl mx-auto px-6 py-8">
+        <div class="bg-white rounded-xl border border-gray-200 p-5 flex items-start gap-4 shadow-sm">
+            <div class="p-3 bg-gray-50 rounded-lg shrink-0">
+                <i data-lucide="hotel" class="w-6 h-6 text-gray-700"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-brand text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">出發點</span>
+                    <h2 class="text-lg font-bold">西鐵克魯姆飯店 名古屋</h2>
+                </div>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    每日行程的出發與終點。緊鄰「久屋大通站」，大幅減少步行時間。房型為雙人一大床 / 附獨立淋浴間。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Itinerary & Summary -->
+    <section class="max-w-4xl mx-auto px-6 mb-20">
+        
+        <!-- Tab Navigation -->
+        <div class="flex overflow-x-auto pb-2 mb-8 gap-3 snap-x hide-scrollbar border-b border-gray-100">
+            <button class="tab-btn active shrink-0 pb-3 text-sm font-bold border-b-2 border-brand text-brand transition-all" data-target="day1">Day 1<span class="ml-1 text-xs font-normal text-gray-400">7/25</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all" data-target="day2">Day 2<span class="ml-1 text-xs font-normal text-gray-400">7/26</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all" data-target="day3">Day 3<span class="ml-1 text-xs font-normal text-gray-400">7/27</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all" data-target="day4">Day 4<span class="ml-1 text-xs font-normal text-gray-400">7/28</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all" data-target="day5">Day 5<span class="ml-1 text-xs font-normal text-gray-400">7/29</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all" data-target="day6">Day 6<span class="ml-1 text-xs font-normal text-gray-400">7/30</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all" data-target="day7">Day 7<span class="ml-1 text-xs font-normal text-gray-400">7/31</span></button>
+            <button class="tab-btn shrink-0 pb-3 text-sm font-bold border-b-2 border-transparent text-gray-400 hover:text-gray-700 transition-all pl-2" data-target="summary"><i data-lucide="list-collapse" class="w-4 h-4 inline-block mr-1 -mt-0.5"></i>總表<span class="ml-1 text-xs font-normal text-gray-400">Summary</span></button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="min-h-[500px] max-w-3xl mx-auto">
+            
+            <!-- Day 1 -->
+            <div id="day1" class="tab-content active">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">抵達與市區地標</h3>
+                    <p class="text-sm text-gray-500 mb-4">第一天輕鬆為主，以飯店周邊為活動範圍，無需轉車奔波。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=矢場とん栄セントライズ店+to:オアシス21+to:世界の山ちゃん錦三大津店&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發點：飯店寄放行李 <span class="text-xs font-normal text-gray-400">11:20 抵達機場</span></h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">抵達名古屋後，搭名鐵轉地鐵至「久屋大通站」，先至西鐵克魯姆飯店放行李。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">午餐：矢場豬排</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">步行至飯店旁邊的地下街，享用名古屋名物「矢場豬排 (矢場とん)」。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">傍晚：綠洲21與電視塔</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">在飯店旁的綠洲21與中部電力未來塔周邊散步看夜景。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">晚餐：世界的山將 <span class="text-xs font-normal text-gray-400">21:00 前結束</span></h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">步行至錦三大津店，空間寬敞明亮，使用平板點餐，享用招牌夢幻胡椒雞翅。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div id="day2" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">名古屋城、大須與夢幻甜點</h3>
+                    <p class="text-sm text-gray-500 mb-4">全程搭乘「名城線」一線到底，順遊不繞路。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=名古屋城+to:鳥開総本家+to:大須観音+to:ハーブス栄本店+to:サイゼリヤ名古屋桜通大津店&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發：西鐵克魯姆飯店</h4>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">早餐：Edelweiss (08:30)</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">步行至附近純喫茶名店，享受華麗復古氛圍與經典晨間套餐。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">上午：名古屋城</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">搭乘名城線，免換車直達名古屋城參觀。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">午餐：名古屋鳥開總本家</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">品嚐名古屋名物！招牌的交趾雞翅與極致美味的親子丼，絕對不能錯過。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">下午：大須商店街 & 大須觀音</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">搭名城線直達「上前津站」。順著熱鬧的大須商店街尋寶吃小吃，走到盡頭參拜大須觀音。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">傍晚：HARBS 榮本店</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">回榮區朝聖總本店，享受最經典的水果千層蛋糕。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">晚餐：Saizeriya 薩莉亞</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">回到飯店對面的 Saizeriya，享受平價美味又輕鬆的義式晚餐。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div id="day3" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">伊勢神宮與頂級和牛</h3>
+                    <p class="text-sm text-gray-500 mb-4">搭乘近鐵特急前往三重縣，傍晚回歸市區享用大餐。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=スターバックスコーヒー桜通大津店+to:伊勢神宮外宮+to:おかげ横丁+to:飛騨牛一頭家馬喰一代名古屋栄&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發：西鐵克魯姆飯店</h4>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">早餐：星巴克 櫻通大津店</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">在飯店對面的星巴克櫻通大津店悠閒享用早餐與咖啡，準備搭車。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">上午：伊勢神宮</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">搭乘近鐵特急至伊勢市。依照傳統，先參拜「外宮」，再搭乘巴士前往「內宮」。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">午餐：托福橫丁</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">內宮旁的復古老街邊走邊吃。推薦必吃：松阪牛烤肉串、伊勢烏龍麵、赤福冰。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">晚餐：馬喰一代 (榮店)</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">傍晚搭近鐵返回市區。晚餐安排重頭戲，於氣派的飛驒牛一頭家享用頂級燒肉。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 4 -->
+            <div id="day4" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">東別院市集與熱田神宮</h3>
+                    <p class="text-sm text-gray-500 mb-4">名城線之旅，中午神宮享用名物，晚上回市區吃高人氣鰻魚飯。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=東別院+to:熱田神宮+to:Alpen+Nagoya+to:炭焼きうなぎ登河栄店&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發：西鐵克魯姆飯店</h4>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">早餐：客美多咖啡</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">點咖啡送吐司的經典老牌，座位舒適禁菸。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">上午：東別院生活市集</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">10:00 抵達市集。每月 28 日限定舉辦，充滿手作烘焙與質感餐車。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">中午：熱田神宮 & 宮棊子麵</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">搭地鐵續往熱田神宮參拜。午餐安排神宮境內的<b>「宮きしめん 神宮店」</b>，在綠意盎然的半露天庭院中享用名古屋必吃平盆寬烏龍麵。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">下午：ALPEN NAGOYA 旗艦店</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">搭車回榮區，前往 10 層樓綜合體育用品店血拚。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">晚餐：炭烤鰻魚・登河</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">逛完街後，享用高人氣鰻魚飯，品嚐極致酥脆的關西風炭烤鰻魚與招盤厚煎玉子燒。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div id="day5" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">犬山城下町與血拚</h3>
+                    <p class="text-sm text-gray-500 mb-4">上午探索百年城下町，下午回市區大肆採購。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=コンパル栄西店+to:犬山城+to:犬山城下町+to:ドン・キホーテ名古屋栄店+to:ビックカメラ名古屋駅西店&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發：西鐵克魯姆飯店</h4>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">早餐：Konparu</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">老店必吃，招牌炸蝦三明治。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">上午：犬山城</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">轉車直達犬山參觀國寶天守。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">午餐：犬山城下町 邊走邊吃</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">在江戶風情老街品嚐飛驒牛握壽司、五平餅等特色小吃。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">下午：大採購時間</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">回到市區，開逛榮商圈的唐吉訶德、大國藥妝或名車站的 Bic Camera。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 6 -->
+            <div id="day6" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">無腦搭車 Outlet 血拚日</h3>
+                    <p class="text-sm text-gray-500 mb-4">名鐵巴士中心直達免轉車，輕鬆購物。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=加藤珈琲店+to:名鉄バスセンター+to:三井アウトレットパークジャズドリーム長島+to:蔘好来&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發：西鐵克魯姆飯店</h4>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">早餐：加藤咖啡店</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">享用超高評價名店的豐盛早餐套餐。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker primary"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">整日：三井 Outlet Park 長島</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">前往名鐵巴士中心搭乘直達高速巴士，日本最大級 Outlet 逛整天。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">晚餐：蔘好來 拉麵店</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">享用獨特美味的拉麵，完美收心。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 7 -->
+            <div id="day7" class="tab-content">
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-2">機場免稅店與返程</h3>
+                    <p class="text-sm text-gray-500 mb-4">滿載而歸，平安返航。</p>
+                    <div class="map-container shadow-sm">
+                        <iframe src="https://maps.google.com/maps?saddr=西鉄ホテルクルーム名古屋&daddr=中部国際空港&hl=zh-TW&output=embed" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mt-8 ml-2">
+                    <div class="timeline-item">
+                        <div class="timeline-marker hotel"></div>
+                        <h4 class="font-bold text-base flex items-center gap-2">出發：飯店退房</h4>
+                        <p class="text-sm text-gray-600 mt-1 leading-relaxed">前往機場進行最後伴手禮採買（推薦：蝦餅 えびせんべいの里）。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary / 總表分頁內容 -->
+            <div id="summary" class="tab-content">
+                <div class="mb-10 text-center border-b border-gray-100 pb-6">
+                    <h2 class="text-2xl md:text-3xl font-black text-brand mb-2">景點、美食與費用總表</h2>
+                    <p class="text-sm text-gray-500">行程精華統整與預算概覽 (nagoya trip)</p>
+                </div>
+
+                <!-- 景點與購物 -->
+                <div class="mb-10">
+                    <div class="flex items-center gap-2 mb-5">
+                        <div class="p-1.5 bg-brand text-white rounded"><i data-lucide="map" class="w-4 h-4"></i></div>
+                        <h3 class="text-xl font-bold text-brand">景點與購物總覽</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">歷史與文化景點</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i><span><b>名古屋城：</b> 日本百大名城。</span></li>
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i><span><b>大須觀音：</b> 祈福聖地，緊鄰商店街。</span></li>
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i><span><b>伊勢神宮：</b> 日本最高位階神宮。</span></li>
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i><span><b>熱田神宮：</b> 草薙神劍幽靜地。</span></li>
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500 shrink-0 mt-0.5"></i><span><b>犬山城：</b> 現存最古老天守之一。</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">逛街與購物</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="shopping-bag" class="w-4 h-4 text-accent shrink-0 mt-0.5"></i><span><b>ALPEN NAGOYA：</b> 10層樓體育旗艦店。</span></li>
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="shopping-bag" class="w-4 h-4 text-accent shrink-0 mt-0.5"></i><span><b>三井 Outlet：</b> 日本最大級 Outlet。</span></li>
+                                <li class="flex items-start gap-3 text-sm"><i data-lucide="shopping-bag" class="w-4 h-4 text-accent shrink-0 mt-0.5"></i><span><b>東別院市集：</b> 每月28日限定手作。</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 美食清單 -->
+                <div class="mb-10">
+                    <div class="flex items-center gap-2 mb-5">
+                        <div class="p-1.5 bg-brand text-white rounded"><i data-lucide="utensils" class="w-4 h-4"></i></div>
+                        <h3 class="text-xl font-bold text-brand">美食名店清單</h3>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="table-container overflow-x-auto w-full">
+                            <table class="w-full text-left border-collapse min-w-[600px]">
+                                <thead>
+                                    <tr class="bg-gray-50 border-b border-gray-200">
+                                        <th class="p-4 text-sm font-bold text-gray-500">分類</th>
+                                        <th class="p-4 text-sm font-bold text-gray-500">店名</th>
+                                        <th class="p-4 text-sm font-bold text-gray-500">特色說明</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-sm">
+                                    <tr>
+                                        <td class="p-4 font-bold text-brand" rowspan="2">預約名店</td>
+                                        <td class="p-4 font-medium">馬喰一代 (榮店)</td>
+                                        <td class="p-4 text-gray-600">頂級飛驒牛燒肉。</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-4 font-medium">炭烤鰻魚・登河</td>
+                                        <td class="p-4 text-gray-600">酥脆關西風與厚煎玉子燒。</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="p-4 font-bold text-brand" rowspan="4">名古屋名物</td>
+                                        <td class="p-4 font-medium">矢場豬排 / 世界山將</td>
+                                        <td class="p-4 text-gray-600">必吃味噌豬排與雞翅。</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="p-4 font-medium">鳥開總本家</td>
+                                        <td class="p-4 text-gray-600">金賞親子丼。</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="p-4 font-medium">宮きしめん (熱田)</td>
+                                        <td class="p-4 text-gray-600">神宮庭院寬烏龍麵。</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="p-4 font-medium">うな久 (犬山)</td>
+                                        <td class="p-4 text-gray-600">在地百年鰻魚飯。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 預算 -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-bold text-gray-500">預算預估 (每人)</span>
+                        <span class="text-xl font-black text-accent">¥52,500</span>
+                    </div>
+                    <p class="text-[10px] text-gray-400">※ 不含機票、住宿與個人購物費用。</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="text-center py-10 text-gray-400 text-sm border-t border-gray-100">
+        <p>Wishing you a wonderful trip to Nagoya.</p>
+    </footer>
+
+    <!-- Interactive Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => {
+                        b.classList.remove('active', 'border-brand', 'text-brand');
+                        b.classList.add('border-transparent', 'text-gray-400');
+                    });
+                    btn.classList.add('active', 'border-brand', 'text-brand');
+                    btn.classList.remove('border-transparent', 'text-gray-400');
+
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
